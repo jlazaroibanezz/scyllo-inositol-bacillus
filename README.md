@@ -9,4 +9,9 @@ the constraint-based model that shall be modified, in this case, the iYO844 mode
 
 ## COBRApy installation 
 
+'''
+pip install cobra
+python3 generate_sc_iYO844_def.py
+'''
 
+The result is a modified constraint-based model named sc_iYO844 with the capacity to synthesize scyllo-inositol. 
