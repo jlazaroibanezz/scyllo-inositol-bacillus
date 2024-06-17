@@ -34,9 +34,26 @@ $ pip install fnyzer
 To run the simulations with fnyzer it is necessary to download a solver that will solve the linear programming problem. We suggest GLPK, Gurobi or
 CPLEX. In our case, we used [CPLEX](https://www.ibm.com/es-es/products/ilog-cplex-optimization-studio).
 
+Once installed the solver and the fnyzer Python package run in a terminal:
 
+```
+$ python3 gecko_smom_FNs_def.py
+```
+The parameter growth (0.3 h-1 by default) can be adjusted to obtain the different scyllo-inositol production values generated in the simulations 
+that constitute the graphs in Figures 7 and 8 in the paper "Flexible Nets to Improve GEM Cell Factories by Combining Kinetic and Proteomics Data"
 
+For instance:
 
+```
+$ python3 gecko_smom_FNs_def.py -g 0
+```
+The expected output would be:
+
+```
+GECKO+sMOMENT constraints
+Growth rate 0
+Scyllo-inositol production:  5.303801878612387 mmol gDW-1 h-1
+```
 
 
 
