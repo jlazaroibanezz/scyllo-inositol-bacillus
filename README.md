@@ -9,12 +9,14 @@ the constraint-based model that shall be modified, in this case, the iYO844 mode
 
 ## COBRApy installation 
 
+Open a terminal and run the following command:
+
 ```
 pip install cobra
 ```
 ## Generation of scyllo-inositol producing model
 
-Run in a terminal the file generate_sc_iYO844_def.py
+Run in a terminal the file generate_sc_iYO844_def.py using Python:
 
 ```
 python3 generate_sc_iYO844_def.py
