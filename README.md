@@ -24,4 +24,19 @@ $ python3 generate_sc_iYO844_def.py
 
 The result is a modified constraint-based model named sc_iYO844 with the capacity to synthesize scyllo-inositol in the working directory.
 
+## Simulations using Flexible Nets
+
+Install the fnyzer package: 
+
+```
+$ pip install fnyzer
+```
+To run the simulations with fnyzer it is necessary to download a solver that will solve the linear programming problem. We suggest GLPK, Gurobi or
+CPLEX. In our case, we used [CPLEX](https://www.ibm.com/es-es/products/ilog-cplex-optimization-studio).
+
+
+
+
+
+
 
