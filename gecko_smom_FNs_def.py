@@ -16,7 +16,7 @@ args = parser.parse_args()
 growth_rt = args.growth
 
 # Constants
-P = 0.01065  # Total enzyme abundance (g gDW-1)
+P = 0.01065  # Total enzyme abundance (units)
 
 # Read model and transform to Flexible Net
 model = cobra.io.read_sbml_model('sc_iYO844.xml')
@@ -65,9 +65,9 @@ for r in rxns:
         fnet['places']['E_'+r+'_f'] = ea
         fnet['trans']['t_'+r+'_f']['l0'] = 0
         fnet['shandlers']['s_'+r+'_f'] = [{'e':('E_'+r+'_f','s_'+r+'_f'),
-                                               'r':('s_'+r+'_f','t_'+r+'_f'),
-                                               'vpool':('E_total','s_'+r+'_f')},
-                           'r<='+str(kcat)+'*'+str(ea), 'r<='+str(kcat)+'*vpool'+'/'+str(mw)]
+                                           'r':('s_'+r+'_f','t_'+r+'_f'),
+                                           'p':('E_total','s_'+r+'_f')},
+                           'r<='+str(kcat)+'*'+str(ea), 'r<='+str(kcat)+'*p'+'/'+str(mw)]
         if typ == 'fcat':
             fnet['extracons'].append("l0['t_"+str(r)+"_b'] == 0")
 			
@@ -76,17 +76,17 @@ for r in rxns:
         fnet['trans']['t_'+r+'_b']['l0'] = 0
         fnet['extracons'].append("l0['t_"+r+"_f'] == 0")
         fnet['shandlers']['s_'+r+'_b'] = [{'e':('E_'+r+'_b','s_'+r+'_b'),
-                                               'r':('s_'+r+'_b','t_'+r+'_b'),
-                                               'vpool':('E_total','s_'+r+'_b')},
-                           'r<='+str(kcat)+'*'+str(ea),'r<='+str(kcat)+'*vpool'+'/' + str(mw)]
+                                           'r':('s_'+r+'_b','t_'+r+'_b'),
+                                           'p':('E_total','s_'+r+'_b')},
+                           'r<='+str(kcat)+'*'+str(ea),'r<='+str(kcat)+'*p'+'/' + str(mw)]
 	
     elif typ == 'scillo':
         fnet['places']['E_'+r+'_f'] = ea
         fnet['trans']['t_'+r+'_f']['l0'] = 0
         fnet['shandlers']['s_'+r+'_f'] = [{'e':('E_'+r+'_f','s_'+r+'_f'),
-                                               'r':('s_'+r+'_f','t_'+r+'_f'),
-                                               'vpool':('E_total','s_'+r+'_f')},
-                           'r>='+str(kcat)+'*'+str(ea),'r<='+str(kcat)+'*vpool'+'/'+str(mw)]
+                                           'r':('s_'+r+'_f','t_'+r+'_f'),
+                                           'p':('E_total','s_'+r+'_f')},
+                           'r>='+str(kcat)+'*'+str(ea),'r<='+str(kcat)+'*p'+'/'+str(mw)]
 	
 ### Set parameters and optimize
 fnet['obj'] = {'f': "l0['t_EX_scino_f']", 'sense': 'max'}  # Define objective function
@@ -96,6 +96,6 @@ netobj = FNFactory(fnet)
 netobj.optimize()
 solution = netobj.objval 
 print("GECKO+sMOMENT constraints")
-print("Growth rate", growth_rt, 'h-1')
+print("Growth rate", growth_rt, "h-1")
 print('Scyllo-inositol production: ', solution, 'mmol gDW-1 h-1')
 
