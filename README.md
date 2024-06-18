@@ -40,7 +40,7 @@ Once installed the solver and the fnyzer Python package, run in a terminal:
 $ python3 gecko_smom_FNs_def.py
 ```
 The parameter growth (0.3 h-1 by default) can be adjusted to obtain the different scyllo-inositol production values generated in the simulations 
-that constitute the graphs in Figures 7 and 8 in the paper "Flexible Nets to Improve GEM Cell Factories by Combining Kinetic and Proteomics Data"
+that constitute the graphs in Figures 7 and 8 in the paper "Flexible Nets to Improve GEM Cell Factories by Combining Kinetic and Proteomics Data".
 
 For instance:
 
