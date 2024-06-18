@@ -51,7 +51,7 @@ The expected output would be:
 
 ```
 GECKO+sMOMENT constraints
-Growth rate 0
+Growth rate 0 h-1
 Scyllo-inositol production:  5.303801878612387 mmol gDW-1 h-1
 ```
 
