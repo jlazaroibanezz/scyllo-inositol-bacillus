@@ -34,7 +34,7 @@ $ pip install fnyzer
 To run the simulations with fnyzer it is necessary to download a solver that will solve the linear programming problem. We suggest GLPK, Gurobi or
 CPLEX. In our case, we used [CPLEX](https://www.ibm.com/es-es/products/ilog-cplex-optimization-studio).
 
-Once installed the solver and the fnyzer Python package run in a terminal:
+Once installed the solver and the fnyzer Python package, run in a terminal:
 
 ```
 $ python3 gecko_smom_FNs_def.py
