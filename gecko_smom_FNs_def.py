@@ -12,11 +12,15 @@ import cobra
 # Parse parameters
 parser = argparse.ArgumentParser()
 parser.add_argument("-g", "--growth", default=0.3, help="growth rate (h-1)")
+parser.add_argument("-u", "--glc_uptake", default=100, help="glucose uptake rate (mmol gDW-1 h-1)")
+parser.add_argument("-t", "--cons_type", default='g+s', help="Type of constraints added")
 args = parser.parse_args()
 growth_rt = args.growth
+glc_uptake = args.glc_uptake
+cons_type = args.cons_type
 
 # Constants
-P = 0.01065  # Total enzyme abundance (units)
+P = 0.01065  # Total enzyme abundance (g gDW-1)
 
 # Read model and transform to Flexible Net
 model = cobra.io.read_sbml_model('sc_iYO844.xml')
@@ -59,43 +63,119 @@ fnet['extracons'] = []
 
 fnet['places']['E_total'] = P  # Total enzyme abundance
 
-for r in rxns:
-    typ, kcat, ea, mw = rxns[r]['typ'], rxns[r]['kcat'], rxns[r]['ea'], rxns[r]['mw']
-    if typ in ['fonly', 'fcat']:
-        fnet['places']['E_'+r+'_f'] = ea
-        fnet['trans']['t_'+r+'_f']['l0'] = 0
-        fnet['shandlers']['s_'+r+'_f'] = [{'e':('E_'+r+'_f','s_'+r+'_f'),
-                                           'r':('s_'+r+'_f','t_'+r+'_f'),
-                                           'p':('E_total','s_'+r+'_f')},
+if cons_type == 'g+s':
+    for r in rxns:
+        typ, kcat, ea, mw = rxns[r]['typ'], rxns[r]['kcat'], rxns[r]['ea'], rxns[r]['mw']
+        if typ in ['fonly', 'fcat']:
+            fnet['places']['E_'+r+'_f'] = ea
+            fnet['trans']['t_'+r+'_f']['l0'] = 0
+            fnet['shandlers']['s_'+r+'_f'] = [{'e':('E_'+r+'_f','s_'+r+'_f'),
+                                               'r':('s_'+r+'_f','t_'+r+'_f'),
+                                               'p':('E_total','s_'+r+'_f')},
                            'r<='+str(kcat)+'*'+str(ea), 'r<='+str(kcat)+'*p'+'/'+str(mw)]
-        if typ == 'fcat':
-            fnet['extracons'].append("l0['t_"+str(r)+"_b'] == 0")
+            if typ == 'fcat':
+                fnet['extracons'].append("l0['t_"+str(r)+"_b'] == 0")
 			
-    elif typ == 'bcat':
-        fnet['places']['E_'+r+'_b'] = ea
-        fnet['trans']['t_'+r+'_b']['l0'] = 0
-        fnet['extracons'].append("l0['t_"+r+"_f'] == 0")
-        fnet['shandlers']['s_'+r+'_b'] = [{'e':('E_'+r+'_b','s_'+r+'_b'),
-                                           'r':('s_'+r+'_b','t_'+r+'_b'),
-                                           'p':('E_total','s_'+r+'_b')},
+        elif typ == 'bcat':
+            fnet['places']['E_'+r+'_b'] = ea
+            fnet['trans']['t_'+r+'_b']['l0'] = 0
+            fnet['extracons'].append("l0['t_"+r+"_f'] == 0")
+            fnet['shandlers']['s_'+r+'_b'] = [{'e':('E_'+r+'_b','s_'+r+'_b'),
+                                               'r':('s_'+r+'_b','t_'+r+'_b'),
+                                               'p':('E_total','s_'+r+'_b')},
                            'r<='+str(kcat)+'*'+str(ea),'r<='+str(kcat)+'*p'+'/' + str(mw)]
 	
-    elif typ == 'scillo':
-        fnet['places']['E_'+r+'_f'] = ea
-        fnet['trans']['t_'+r+'_f']['l0'] = 0
-        fnet['shandlers']['s_'+r+'_f'] = [{'e':('E_'+r+'_f','s_'+r+'_f'),
-                                           'r':('s_'+r+'_f','t_'+r+'_f'),
-                                           'p':('E_total','s_'+r+'_f')},
+        elif typ == 'scillo':
+            fnet['places']['E_'+r+'_f'] = ea
+            fnet['trans']['t_'+r+'_f']['l0'] = 0
+            fnet['shandlers']['s_'+r+'_f'] = [{'e':('E_'+r+'_f','s_'+r+'_f'),
+                                               'r':('s_'+r+'_f','t_'+r+'_f'),
+                                               'p':('E_total','s_'+r+'_f')},
                            'r>='+str(kcat)+'*'+str(ea),'r<='+str(kcat)+'*p'+'/'+str(mw)]
+                           
+    if args.glc_uptake != 100:
+        print("GECKO+sMOMENT+glucose uptake rate constraints")
+    else:
+        print("GECKO+sMOMENT constraints")
+                           
+elif cons_type == 'g':
+    for r in rxns:
+        typ, kcat, ea = rxns[r]['typ'], rxns[r]['kcat'], rxns[r]['ea']
+        if typ in ['fonly', 'fcat']:
+            fnet['places']['E_'+r+'_f'] = ea
+            fnet['trans']['t_'+r+'_f']['l0'] = 0
+            fnet['shandlers']['s_'+r+'_f'] = [{'e':('E_'+r+'_f','s_'+r+'_f'),
+                                               'r':('s_'+r+'_f','t_'+r+'_f')},
+                           'r<='+str(kcat)+'*'+str(ea)]
+            if typ == 'fcat':
+                fnet['extracons'].append("l0['t_"+str(r)+"_b'] == 0")
+			
+        elif typ == 'bcat':
+            fnet['places']['E_'+r+'_b'] = ea
+            fnet['trans']['t_'+r+'_b']['l0'] = 0
+            fnet['extracons'].append("l0['t_"+r+"_f'] == 0")
+            fnet['shandlers']['s_'+r+'_b'] = [{'e':('E_'+r+'_b','s_'+r+'_b'),
+                                               'r':('s_'+r+'_b','t_'+r+'_b')},
+                           'r<='+str(kcat)+'*'+str(ea)]
+	
+        elif typ == 'scillo':
+            fnet['places']['E_'+r+'_f'] = ea
+            fnet['trans']['t_'+r+'_f']['l0'] = 0
+            fnet['shandlers']['s_'+r+'_f'] = [{'e':('E_'+r+'_f','s_'+r+'_f'),
+                                               'r':('s_'+r+'_f','t_'+r+'_f')},
+                           'r>='+str(kcat)+'*'+str(ea)]
+                           
+    if args.glc_uptake != 100:
+        print("GECKO+glucose uptake rate constraints")
+    else:
+        print("GECKO constraints")
+        
+elif cons_type == 'n':
+    print('No enzymatic constraintS')
+    pass
+
+
+if cons_type == 's':
+    for r in rxns:
+        typ, kcat, mw = rxns[r]['typ'], rxns[r]['kcat'], rxns[r]['mw']
+        if typ in ['fonly', 'fcat']:
+            fnet['trans']['t_'+r+'_f']['l0'] = 0
+            fnet['shandlers']['s_'+r+'_f'] = [{'r':('s_'+r+'_f','t_'+r+'_f'),
+                                               'p':('E_total','s_'+r+'_f')},
+                            'r<='+str(kcat)+'*p'+'/'+str(mw)]
+            if typ == 'fcat':
+                fnet['extracons'].append("l0['t_"+str(r)+"_b'] == 0")
+			
+        elif typ == 'bcat':
+            fnet['trans']['t_'+r+'_b']['l0'] = 0
+            fnet['extracons'].append("l0['t_"+r+"_f'] == 0")
+            fnet['shandlers']['s_'+r+'_b'] = [{'r':('s_'+r+'_b','t_'+r+'_b'),
+                                               'p':('E_total','s_'+r+'_b')},
+                           'r<='+str(kcat)+'*p'+'/' + str(mw)]
+	
+        elif typ == 'scillo':
+            fnet['trans']['t_'+r+'_f']['l0'] = 0
+            fnet['shandlers']['s_'+r+'_f'] = [{'r':('s_'+r+'_f','t_'+r+'_f'),
+                                               'p':('E_total','s_'+r+'_f')},
+                           'r<='+str(kcat)+'*p'+'/'+str(mw)]
+                           
+    if args.glc_uptake != 100:
+        print("sMOMENT+glucose uptake rate constraints")
+    else:
+        print("sMOMENT constraints")
+
 	
 ### Set parameters and optimize
 fnet['obj'] = {'f': "l0['t_EX_scino_f']", 'sense': 'max'}  # Define objective function
 fnet['extracons'].append("l0['t_BIOMASS_BS_10_f']== "+str(growth_rt))  # Fix growth rate
+fnet['extracons'].append("l0['t_EX_glc__D_e_b']<= "+str(glc_uptake))  # Constrain uptake rate 
 fnet['options'] = {'antype': 'cst'}  # Constant steady-state
 netobj = FNFactory(fnet) 
 netobj.optimize()
 solution = netobj.objval 
-print("GECKO+sMOMENT constraints")
+
+
 print("Growth rate", growth_rt, "h-1")
+print("Glucose uptake rate", netobj.trans['t_EX_glc__D_e_b'].avl, 'mmol gDW-1 h-1')
 print('Scyllo-inositol production: ', solution, 'mmol gDW-1 h-1')
 
