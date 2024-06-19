@@ -32,28 +32,32 @@ Install the fnyzer package:
 $ pip install fnyzer
 ```
 To run the simulations with fnyzer it is necessary to download a solver that will solve the linear programming problem. We suggest GLPK, Gurobi or
-CPLEX. In our case, we used [CPLEX](https://www.ibm.com/es-es/products/ilog-cplex-optimization-studio).
+CPLEX. In our case, we used [CPLEX](https://www.ibm.com/es-es/products/ilog-cplex-optimization-studio). However, GLPK is the most accessible one.
 
 Once installed the solver and the fnyzer Python package, run in a terminal:
 
 ```
 $ python3 gecko_smom_FNs_def.py
 ```
-The parameter growth (0.3 h-1 by default) can be adjusted to obtain the different scyllo-inositol production values generated in the simulations 
-that constitute the graphs in Figures 7 and 8 in the paper "Flexible Nets to Improve GEM Cell Factories by Combining Kinetic and Proteomics Data".
+Three parameters can be modified in order to obtain the scyllo-inositol production values generated in the simulations that constitute the graphs in Figures 7 and 8 
+in the paper "Flexible Nets to Improve GEM Cell Factories by Combining Kinetic and Proteomics Data":
 
-For instance:
+1. The parameter growth (0.3 h-1 by default): Sets the fixed growth rate to perform the simulations while the scyllo-inositol production is maximized.
+2. The parameter glc_uptake (100 mmol gDW-1 h-1 by default): The glucose uptake rate is unconstraint by default, but it can be adjusted to the experimental value 7.71  mmol gDW-1 h-1.
+3. The parameter cons_type: Sets the type of constraints that are integrated in the sc_iYO844 model.
+
+For instance, consider that we want to compute the scyllo-inositol production and the glucose uptake rate when the growth rate is 0.032 and applying the only the GECKO constraints: 
 
 ```
-$ python3 gecko_smom_FNs_def.py -g 0
+$ python3 gecko_smom_FNs_def.py -g 0.032 -t g
 ```
 The expected output would be:
 
 ```
-GECKO+sMOMENT constraints
-Growth rate 0 h-1
-Scyllo-inositol production:  5.303801878612387 mmol gDW-1 h-1
+GECKO constraints
+Growth rate 0.032 h-1
+Glucose uptake rate 24.79710095198935 mmol gDW-1 h-1
+Scyllo-inositol production:  19.74652927198935 mmol gDW-1 h-1
 ```
-
 
 
