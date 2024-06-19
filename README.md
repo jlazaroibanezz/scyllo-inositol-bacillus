@@ -37,8 +37,25 @@ CPLEX. In our case, we used [CPLEX](https://www.ibm.com/es-es/products/ilog-cple
 Once installed the solver and the fnyzer Python package, run in a terminal:
 
 ```
-$ python3 gecko_smom_FNs_def.py
+$ python3 gecko_smom_FNs_def.py -h 
 ```
+This command shows an overview of the tunable parameters:
+
+```
+usage: gecko_smom_FNs_def.py [-h] [-g GROWTH] [-u GLC_UPTAKE] [-t CONS_TYPE]
+
+options:
+  -h, --help            show this help message and exit
+  -g GROWTH, --growth GROWTH
+                        growth rate (h-1)
+  -u GLC_UPTAKE, --glc_uptake GLC_UPTAKE
+                        glucose uptake rate (mmol gDW-1 h-1)
+  -t CONS_TYPE, --cons_type CONS_TYPE
+                        Type of constraints added: g+s --> GECKO+sMOMENT constraints; g
+                        --> GECKO constraints; n --> No enzymatic constraints; s -->
+                        sMOMENT constraints
+```
+
 Three parameters can be modified in order to obtain the scyllo-inositol production values generated in the simulations that constitute the graphs in Figures 7 and 8 
 in the paper "Flexible Nets to Improve GEM Cell Factories by Combining Kinetic and Proteomics Data":
 
