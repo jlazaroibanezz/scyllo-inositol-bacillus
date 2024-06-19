@@ -13,7 +13,8 @@ import cobra
 parser = argparse.ArgumentParser()
 parser.add_argument("-g", "--growth", default=0.3, help="growth rate (h-1)")
 parser.add_argument("-u", "--glc_uptake", default=100, help="glucose uptake rate (mmol gDW-1 h-1)")
-parser.add_argument("-t", "--cons_type", default='g+s', help="Type of constraints added")
+parser.add_argument("-t", "--cons_type", default='g+s', help="Type of constraints added: g+s --> GECKO+sMOMENT constraints; \n" + "g --> GECKO constraints; " \
+"n --> No enzymatic constraints; " + "s --> sMOMENT constraints")
 args = parser.parse_args()
 growth_rt = args.growth
 glc_uptake = args.glc_uptake
