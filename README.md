@@ -42,14 +42,14 @@ $ python3 gecko_smom_FNs_def.py -h
 This command shows an overview of the tunable parameters:
 
 ```
-usage: gecko_smom_FNs_def.py [-h] [-g GROWTH] [-u GLC_UPTAKE] [-t CONS_TYPE]
+usage: gecko_smom_FNs_def_jj.py [-h] [-g GROWTH] [-u GLC_UPTAKE_BOUND] [-t CONS_TYPE]
 
 options:
   -h, --help            show this help message and exit
   -g GROWTH, --growth GROWTH
                         growth rate (h-1)
-  -u GLC_UPTAKE, --glc_uptake GLC_UPTAKE
-                        glucose uptake rate (mmol gDW-1 h-1)
+  -u GLC_UPTAKE_BOUND, --glc_uptake_bound GLC_UPTAKE_BOUND
+                        upper bound for the glucose uptake rate (mmol gDW-1 h-1)
   -t CONS_TYPE, --cons_type CONS_TYPE
                         Type of constraints added: g+s --> GECKO+sMOMENT constraints; g
                         --> GECKO constraints; n --> No enzymatic constraints; s -->
