@@ -13,7 +13,7 @@ import cobra
 def_growth_rt = 0.3    # Default growth rate (h-1)
 def_glc_up_bound = 100 # Default upper bound for the glucose uptake rate (mmol gDW-1 h-1)
 def_cons = 'g+s'       # Default model constraints: GECKO+sMOMENT constraints
-P = 0.01065            # Total enzyme abundance (g gDW-1)
+P = 0.01067            # Total enzyme abundance (g gDW-1)
 
 # Parse parameters
 parser = argparse.ArgumentParser()
