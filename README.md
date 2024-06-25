@@ -5,7 +5,7 @@ Combining Kinetic and Proteomics Data" submitted to the 22nd conference on Compu
 
 The generate_sc_iYO844_def.py file contains the code required to implement the reactions necessary for the production of the metabolite 
 of interest, the scyllo-inositol. The file needs the previous installation of the COBRA package and needs to be in the same directory as
-the constraint-based model that shall be modified, in this case, the iYO844 model from Bacillus subtilis.
+the constraint-based model that shall be modified, in this case, the [iYO844.xml](http://bigg.ucsd.edu/models/iYO844) model from Bacillus subtilis.
 
 ## COBRApy installation 
 
